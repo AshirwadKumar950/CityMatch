@@ -26,7 +26,8 @@ import App from "./App";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  //here <BrowserRouter> is used to navigate between the pages of the website without loading as react dom is loaded inside this variable.
   <BrowserRouter>
     <App />
-  </BrowserRouter>
+  </BrowserRouter>,
 );

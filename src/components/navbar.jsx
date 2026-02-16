@@ -65,7 +65,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
       </h1>
 
       <div className="flex items-center gap-8">
-
+      {/* IN place of <a></a> anchor tag here we use Link tag */}
         <Link 
           to="/about"
           className="text-lg font-semibold text-sky-300 hover:text-white"
