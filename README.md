@@ -72,3 +72,18 @@ User → Frontend → Backend API → Database → Backend Scoring → Frontend 
 ```bash
 git clone https://github.com/AshirwadKumar950/CityMatch.git
 cd CityMatch
+npm install
+npm run dev
+http://localhost:5173
+
+ Folder Structure
+CityMatch/
+│
+├── public/              # Static files (images, icons, etc.)
+├── src/                 # Main source code (React components, logic)
+├── index.html           # Entry HTML file
+├── package.json         # Project dependencies and scripts
+├── package-lock.json    # Dependency lock file
+├── tailwind.config.js   # Tailwind CSS configuration
+├── vite.config.js       # Vite configuration
+└── README.md            # Project documentation
