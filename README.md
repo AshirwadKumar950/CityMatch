@@ -1,16 +1,74 @@
-# React + Vite
+# SmartRelocate – Intelligent Region Recommendation System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SmartRelocate is a full-stack web application that helps users find the best regions to live in based on their personal preferences and essential facilities such as hospitals, schools, gyms, supermarkets, and parks.
 
-Currently, two official plugins are available:
+Instead of manually searching maps and comparing locations, SmartRelocate uses geospatial analysis and scoring algorithms to recommend the most suitable regions visually on an interactive map. :contentReference[oaicite:1]{index=1}
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Select any location or region on the map
+- Choose preferred facilities (hospital, school, gym, park, etc.)
+- Intelligent scoring of regions based on facility availability
+- Interactive heatmap showing best regions
+- Fast and responsive UI
+- Real-time visualization using geospatial data
+- User authentication and profile support
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+### Frontend
+- React.js
+- Vite
+- Tailwind CSS
+- Leaflet.js (interactive maps)
+
+### Backend
+- Node.js
+- Express.js
+
+### Database
+- PostgreSQL
+- Supabase
+
+### Tools
+- Git & GitHub
+- VS Code
+- npm
+
+---
+
+## System Architecture
+
+The system consists of three main components: :contentReference[oaicite:2]{index=2}
+
+1. Frontend (React + Leaflet)
+   - Region selection
+   - Facility preference input
+   - Heatmap visualization
+
+2. Backend (Node.js)
+   - Grid generation for selected region
+   - Spatial queries execution
+   - Region scoring algorithm
+
+3. Database (PostgreSQL via Supabase)
+   - Stores facilities data
+   - Provides spatial query support
+
+Data Flow:
+
+User → Frontend → Backend API → Database → Backend Scoring → Frontend Heatmap
+
+---
+
+## Installation and Setup
+
+### Step 1: Clone the repository
+
+```bash
+git clone https://github.com/AshirwadKumar950/CityMatch.git
+cd CityMatch
