@@ -1,29 +1,9 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import './index.css'
-// import App from './App.jsx'
-
-// createRoot(document.getElementById('root')).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
-
-// import { BrowserRouter } from "react-router-dom";
-// import App from "./App";
-
-// ReactDOM.createRoot(document.getElementById("root")).render(
-//   <BrowserRouter>
-//     <App />
-//   </BrowserRouter>
-// );
-
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
+import "leaflet/dist/leaflet.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   //here <BrowserRouter> is used to navigate between the pages of the website without loading as react dom is loaded inside this variable.

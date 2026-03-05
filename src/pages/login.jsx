@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 function Login({ setIsLoggedIn }) {
 
@@ -7,6 +7,7 @@ function Login({ setIsLoggedIn }) {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -21,7 +22,8 @@ function Login({ setIsLoggedIn }) {
     setIsLoggedIn(true);
 
     // Redirect to profile page
-    navigate("/userprofile");
+    const from = location.state?.from || "/userprofile";
+    navigate(from);
   };
 
   return (

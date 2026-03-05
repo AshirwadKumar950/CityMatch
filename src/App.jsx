@@ -7,10 +7,12 @@ import { Routes, Route } from "react-router-dom";
 import About from "./pages/about";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import MapPage from "./pages/mapPage";
 import UserProfile from "./pages/userprofile";
 import LandingSlider from "./components/slider"; 
 import { Navigate } from "react-router-dom";
 import "./App.css";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,9 +22,9 @@ function App() {
 
       <div className="flex-grow">
         <Routes>
-          <Route path="/" element={<LandingSlider />} />
+          <Route path="/" element={<LandingSlider isLoggedIn={isLoggedIn}/>} />
           <Route path="/about" element={<About />} />
-
+          <Route path="/map" element={<MapPage />} />
           {/* login */}
           <Route
             path="/login"
