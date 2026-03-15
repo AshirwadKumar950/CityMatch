@@ -21,177 +21,29 @@
 
 
 
-// // const FACILITIES = [
-// //   { id: "Hospital",       icon: "🏥" },
-// //   { id: "School",         icon: "🏫" },
-// //   { id: "Mall",           icon: "🛍️" },
-// //   { id: "Gym",            icon: "🏋️" },
-// //   { id: "Park",           icon: "🌳" },
-// //   { id: "Metro Station",  icon: "🚇" },
-// //   { id: "Restaurant",     icon: "🍽️" },
-// //   { id: "Airport",        icon: "✈️" },
-// //   { id: "Office Area",    icon: "🏢" },
-// //   { id: "Bus Stop",       icon: "🚌" },
-// //   { id: "University",     icon: "🎓" },
-// //   { id: "Supermarket",    icon: "🛒" },
-// // ];
+// const FACILITIES = [
+//   { id: "Hospital",       icon: "🏥" },
+//   { id: "School",         icon: "🏫" },
+//   { id: "Mall",           icon: "🛍️" },
+//   { id: "Gym",            icon: "🏋️" },
+//   { id: "Park",           icon: "🌳" },
+//   { id: "Metro Station",  icon: "🚇" },
+//   { id: "Restaurant",     icon: "🍽️" },
+//   { id: "Airport",        icon: "✈️" },
+//   { id: "Office Area",    icon: "🏢" },
+//   { id: "Bus Stop",       icon: "🚌" },
+//   { id: "University",     icon: "🎓" },
+//   { id: "Supermarket",    icon: "🛒" },
+// ];
 
-// // const TRAVEL_MODES = [
-// //   { id: "walking",  icon: "🚶", label: "Walk"   },
-// //   { id: "cycling",  icon: "🚴", label: "Cycle"  },
-// //   { id: "driving",  icon: "🚗", label: "Drive"  },
-// //   { id: "transit",  icon: "🚇", label: "Transit" },
-// // ];
-
-
+// const TRAVEL_MODES = [
+//   { id: "walking",  icon: "🚶", label: "Walk"   },
+//   { id: "cycling",  icon: "🚴", label: "Cycle"  },
+//   { id: "driving",  icon: "🚗", label: "Drive"  },
+//   { id: "transit",  icon: "🚇", label: "Transit" },
+// ];
 
 
-// // import React, { useState, useRef, useEffect } from "react";
-// // import DistanceSelector from "./DistanceSelector";
-
-// // const facilities = [
-// //   { id: "Hospital",       icon: "🏥" },
-// //   { id: "School",         icon: "🏫" },
-// //   { id: "Mall",           icon: "🛍️" },
-// //   { id: "Gym",            icon: "🏋️" },
-// //   { id: "Park",           icon: "🌳" },
-// //   { id: "Metro Station",  icon: "🚇" },
-// //   { id: "Restaurant",     icon: "🍽️" },
-// //   { id: "Airport",        icon: "✈️" },
-// //   { id: "Office Area",    icon: "🏢" },
-// //   { id: "Bus Stop",       icon: "🚌" },
-// //   { id: "University",     icon: "🎓" },
-// //   { id: "Supermarket",    icon: "🛒" },
-// // ];
-
-// // const TRAVEL_MODES = [
-// //   { id: "walking",  icon: "🚶", label: "Walk"   },
-// //   { id: "cycling",  icon: "🚴", label: "Cycle"  },
-// //   { id: "driving",  icon: "🚗", label: "Drive"  },
-// //   { id: "transit",  icon: "🚇", label: "Transit" },
-// // ];
-
-
-// // function InfoForm({ selectedLocation }) {
-// //   const [location, setLocation] = useState("");
-// //   const [selectedFacilities, setSelectedFacilities] = useState([]);
-// //   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-// //   const [distanceData, setDistanceData] = useState({
-// //     value: "",
-// //     unit: "km",
-// //     travelMode: "walking"
-// //   });
-
-// //   const dropdownRef = useRef(null);
-
-// //   // Auto update when map is clicked
-// //   useEffect(() => {
-// //     if (selectedLocation) {
-// //       setLocation(selectedLocation);
-// //     }
-// //   }, [selectedLocation]);
-
-// //   // Close dropdown on outside click
-// //   useEffect(() => {
-// //     function handleClickOutside(event) {
-// //       if (
-// //         dropdownRef.current &&
-// //         !dropdownRef.current.contains(event.target)
-// //       ) {
-// //         setDropdownOpen(false);
-// //       }
-// //     }
-
-// //     document.addEventListener("mousedown", handleClickOutside);
-// //     return () =>
-// //       document.removeEventListener("mousedown", handleClickOutside);
-// //   }, []);
-
-// //   const toggleFacility = (facility) => {
-// //     if (selectedFacilities.includes(facility)) {
-// //       setSelectedFacilities(
-// //         selectedFacilities.filter((item) => item !== facility)
-// //       );
-// //     } else {
-// //       setSelectedFacilities([...selectedFacilities, facility]);
-// //     }
-// //   };
-
-// //   const handleSubmit = () => {
-// //     const formData = {
-// //       location,
-// //       facilities: selectedFacilities,
-// //       distance: distanceData
-// //     };
-
-// //     console.log("Final Form Data:", formData);
-// //   };
-
-// //   return (
-// //     <div className="p-6">
-// //       <h2 className="text-2xl text-[oklch(39.4%_0.023_107.4)] font-bold mb-4">
-// //         Property Details
-// //       </h2>
-
-// //       {/* Location Input */}
-// //       <input
-// //         type="text"
-// //         placeholder="Enter the address or click on map"
-// //         value={location}
-// //         onChange={(e) => setLocation(e.target.value)}
-// //         className="border bg-[oklch(73.7%_0.021_106.9)] p-2 w-full mb-4 rounded"
-// //       />
-
-// //       {/* Facilities Dropdown */}
-// //       <div className="relative mb-4" ref={dropdownRef}>
-// //         <div
-// //           onClick={() => setDropdownOpen(!dropdownOpen)}
-// //           className="border p-2 rounded cursor-pointer bg-[oklch(73.7%_0.021_106.9)]"
-// //         >
-// //           {selectedFacilities.length > 0
-// //             ? selectedFacilities.join(", ")
-// //             : "Select preferred facilities"}
-// //         </div>
-
-// //         {dropdownOpen && (
-// //           <div className="absolute z-10 bg-[oklch(58%_0.031_107.3)] text-white border w-full mt-1 max-h-60 overflow-y-auto rounded shadow-md">
-// //             {facilities.map((facility) => (
-// //               <label
-// //                 key={facility}
-// //                 className="block px-3 py-2 hover:bg-white/10 cursor-pointer"
-// //               >
-// //                 <input
-// //                   type="checkbox"
-// //                   checked={selectedFacilities.includes(facility)}
-// //                   onChange={() => toggleFacility(facility)}
-// //                   className="mr-2"
-// //                 />
-// //                 {facility}
-// //               </label>
-// //             ))}
-// //           </div>
-// //         )}
-// //       </div>
-
-// //       {/* Distance Component */}
-// //       <DistanceSelector
-// //         distanceData={distanceData}
-// //         setDistanceData={setDistanceData}
-// //       />
-
-// //       {/* Submit */}
-// //       <button
-// //         onClick={handleSubmit}
-// //         className="bg-[oklch(15.3%_0.006_107.1)] text-white px-4 py-2 rounded"
-// //       >
-// //         Submit
-// //       </button>
-// //     </div>
-// //   );
-// // }
-
-// // export default InfoForm;
 
 
 
@@ -247,27 +99,27 @@
 //     document.addEventListener("mousedown", handleClickOutside);
 //     return () =>
 //       document.removeEventListener("mousedown", handleClickOutside);
-//   }, []);
+//     }, []);
 
-//   const toggleFacility = (facilityId) => {
-//     if (selectedFacilities.includes(facilityId)) {
-//       setSelectedFacilities(
-//         selectedFacilities.filter((item) => item !== facilityId)
-//       );
-//     } else {
-//       setSelectedFacilities([...selectedFacilities, facilityId]);
-//     }
-//   };
-
-//   const handleSubmit = () => {
-//     const formData = {
-//       location,
-//       facilities: selectedFacilities,
-//       distance: distanceData
+//     const toggleFacility = (facilityId) => {
+//       if (selectedFacilities.includes(facilityId)) {
+//         setSelectedFacilities(
+//           selectedFacilities.filter((item) => item !== facilityId)
+//         );
+//       } else {
+//         setSelectedFacilities([...selectedFacilities, facilityId]);
+//       }
 //     };
 
-//     console.log("Final Form Data:", formData);
-//   };
+//     const handleSubmit = () => {
+//       const formData = {
+//         location,
+//         facilities: selectedFacilities,
+//         distance: distanceData
+//       };
+
+//       console.log("Final Form Data:", formData);
+//     };
 
 //   return (
 //     <div className="p-6">
@@ -336,6 +188,30 @@
 // }
 
 // export default InfoForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import React, { useState, useRef, useEffect } from "react";
