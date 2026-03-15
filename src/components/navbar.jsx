@@ -9,22 +9,22 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full flex items-center justify-between px-8 py-4 bg-gray-900 z-50">
-      <h1 className="text-3xl font-bold text-sky-400 drop-shadow-lg">
-        <Link to="/">CityMatch 🚀</Link>
+    <div className="fixed top-0 left-0 w-full flex items-center justify-between px-10 py-4 bg-gray-900/95 backdrop-blur-md border-b border-white/[0.07] z-50">
+      <h1 className="text-xl font-bold text-white tracking-tight">
+        <Link to="/">City<span className="text-sky-400">Match</span> <span className="text-sky-400">🚀</span></Link>
       </h1>
 
       <div className="flex items-center gap-8">
         <Link
           to="/about"
-          className="text-lg font-semibold text-sky-300 hover:text-white"
+          className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
         >
           About
         </Link>
 
         {isLoggedIn ? (
           <div className="relative group">
-            <span className="text-lg font-semibold text-green-400 hover:text-white cursor-pointer">
+            <span className="text-sm font-semibold text-slate-300 hover:text-white cursor-pointer">
               Profile
             </span>
 
@@ -63,13 +63,13 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
           <>
             <Link
               to="/login"
-              className="text-lg font-semibold text-sky-300 hover:text-white"
+              className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="text-lg font-semibold text-sky-300 hover:text-white"
+              className="text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg transition-colors"
             >
               Sign Up
             </Link>

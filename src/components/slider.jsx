@@ -103,52 +103,73 @@ function Slider({isLoggedIn}) {
         style={{ backgroundImage: `url(${slides[currentIndex].image})` }}
         className="w-full h-full bg-center bg-cover duration-500 ease-in-out"
       >
-        <div className="w-full h-full bg-black/40 flex items-center justify-center">
+        <div
+          className="w-full h-full flex items-center justify-center"
+          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.08) 100%)' }}
+        >
           <div className="text-center text-white px-4 max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg transition-all duration-700 transform translate-y-0">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-sm font-medium"
+              style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}
+            >
+              ✦ Smart Relocation Platform
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold mb-5 drop-shadow-lg tracking-tight leading-tight">
               {slides[currentIndex].title}
             </h1>
-            <p className="text-xl md:text-2xl mb-8 drop-shadow-md">
+            <p className="text-lg md:text-xl mb-10 font-light max-w-2xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.78)' }}>
               {slides[currentIndex].description}
             </p>
-           <button
+            <button
               onClick={() =>
                 navigate(isLoggedIn ? "/map" : "/login", {
                   state: { from: "/map" },
                 })
               }
-              className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105"
+              className="font-semibold py-3.5 px-10 rounded-xl transition-all hover:scale-105 text-white"
+              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', boxShadow: '0 4px 28px rgba(99,102,241,0.45)' }}
             >
-              Explore Your Livings
+              Explore Your City
             </button>
           </div>
         </div>
       </div>
 
       {/* Left Arrow */}
-      <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer hover:bg-black/50 transition">
-        <button onClick={prevSlide}>❮</button>
-      </div>
+      <button
+        onClick={prevSlide}
+        className="hidden group-hover:flex absolute top-1/2 -translate-y-1/2 left-5 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+        style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}
+        onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.22)'}
+        onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.1)'}
+      >
+        ❮
+      </button>
 
       {/* Right Arrow */}
-      <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer hover:bg-black/50 transition">
-        <button onClick={nextSlide}>❯</button>
-      </div>
+      <button
+        onClick={nextSlide}
+        className="hidden group-hover:flex absolute top-1/2 -translate-y-1/2 right-5 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+        style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}
+        onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.22)'}
+        onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.1)'}
+      >
+        ❯
+      </button>
 
       {/* Dots (Indicators) */}
-      <div className="absolute bottom-10 w-full flex justify-center gap-3">
+      <div className="absolute bottom-8 w-full flex justify-center items-center gap-2">
         {slides.map((_, slideIndex) => (
           <div
             key={slideIndex}
             onClick={() => setCurrentIndex(slideIndex)}
-            className={`text-2xl cursor-pointer transition-all duration-300 ${
+            className={`cursor-pointer transition-all duration-300 rounded-full ${
               currentIndex === slideIndex
-                ? "text-sky-500 scale-125"
-                : "text-white/60"
+                ? "w-7 h-2 bg-white"
+                : "w-2 h-2 hover:bg-white/70"
             }`}
-          >
-            •
-          </div>
+            style={currentIndex !== slideIndex ? { background: 'rgba(255,255,255,0.4)' } : {}}
+          />
         ))}
       </div>
     </div>
