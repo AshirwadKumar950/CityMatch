@@ -110,6 +110,22 @@ const createPinIcon = () =>
     popupAnchor: [0, -50],
   });
 
+const createResultIcon = () =>
+  L.divIcon({
+    className: "",
+    html: `
+      <div style="
+        width:20px;height:20px;border-radius:50%;
+        background:linear-gradient(135deg,#10b981,#059669);
+        border:2px solid white;
+        box-shadow:0 4px 10px rgba(5,150,105,0.35);
+      "></div>
+    `,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [0, -10],
+  });
+
 // ── Smooth fly-to on pin change ──────────────────────────────────────
 function FlyTo({ position }) {
   const map = useMap();
@@ -291,7 +307,7 @@ function RecenterBtn({ userPos }) {
 }
 
 // ── Main export ──────────────────────────────────────────────────────
-export default function MapComponent({ setSelectedLocation }) {
+export default function MapComponent({ setSelectedLocation, preferredLocations = [] }) {
   const [position,      setPosition]      = useState(null);
   const [userPos,       setUserPos]        = useState(null);
   const [loadingGeo,    setLoadingGeo]     = useState(true);
@@ -402,6 +418,29 @@ export default function MapComponent({ setSelectedLocation }) {
           setPosition={handlePin}
           setSelectedLocation={setSelectedLocation}
         />
+        {preferredLocations
+          .filter((place) => Number.isFinite(Number(place.latitude)) && Number.isFinite(Number(place.longitude)))
+          .map((place) => (
+            <Marker
+              key={`${place.id}-${place.latitude}-${place.longitude}`}
+              position={[Number(place.latitude), Number(place.longitude)]}
+              icon={createResultIcon()}
+            >
+              <Popup>
+                <div style={{ fontFamily: "'DM Sans',sans-serif", minWidth: 160 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: "#064e3b", marginBottom: 4 }}>
+                    {place.name}
+                  </div>
+                  <div style={{ fontSize: 11, color: "#4b5563" }}>
+                    {place.type}
+                  </div>
+                  <div style={{ marginTop: 6, fontSize: 11, color: "#065f46", fontWeight: 600 }}>
+                    Distance: {Number(place.distance_km).toFixed(2)} km
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
         <FlyTo position={position} />
         <ZoomButtons />
         <RecenterBtn userPos={userPos} />

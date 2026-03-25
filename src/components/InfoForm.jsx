@@ -217,6 +217,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import DistanceSelector from "./DistanceSelector";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const facilities = [
   { id: "Hospital",      icon: "🏥" },
   { id: "School",        icon: "🏫" },
@@ -232,11 +234,14 @@ const facilities = [
   { id: "Supermarket",   icon: "🛒" },
 ];
 
-function InfoForm({ selectedLocation }) {
+function InfoForm({ selectedLocation, onResultsChange }) {
   const [location, setLocation] = useState("");
   const [selectedFacilities, setSelectedFacilities] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [focusedInput, setFocusedInput] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [results, setResults] = useState([]);
 
   const [distanceData, setDistanceData] = useState({
     value: "",
@@ -297,13 +302,62 @@ function InfoForm({ selectedLocation }) {
     }
   };
 
-  const handleSubmit = () => {
-    const formData = {
-      location,
-      facilities: selectedFacilities,
-      distance: distanceData,
-    };
-    console.log("Final Form Data:", formData);
+  const parseLocation = (locationText) => {
+    const parts = locationText.split(",").map((part) => part.trim());
+    if (parts.length !== 2) return null;
+
+    const latitude = Number(parts[0]);
+    const longitude = Number(parts[1]);
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) return null;
+
+    return { latitude, longitude };
+  };
+
+  const handleSubmit = async () => {
+    setSearchError("");
+
+    const parsedLocation = parseLocation(location);
+    if (!parsedLocation) {
+      setSearchError("Please select location from map first.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/places/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          latitude: parsedLocation.latitude,
+          longitude: parsedLocation.longitude,
+          facilities: selectedFacilities,
+          distance: distanceData,
+          limit: 20,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to fetch matching places");
+      }
+
+      const nextResults = data.results || [];
+      setResults(nextResults);
+      if (typeof onResultsChange === "function") {
+        onResultsChange(nextResults);
+      }
+    } catch (error) {
+      setSearchError(error.message || "Unable to fetch matching places");
+      setResults([]);
+      if (typeof onResultsChange === "function") {
+        onResultsChange([]);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -618,6 +672,7 @@ function InfoForm({ selectedLocation }) {
           <button
             onClick={handleSubmit}
             className="submit-btn"
+            disabled={isLoading}
             style={{
               width: "100%",
               padding: "13px",
@@ -632,15 +687,53 @@ function InfoForm({ selectedLocation }) {
               display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               boxShadow: "0 4px 16px rgba(99,102,241,0.3)",
               transition: "transform 0.2s, box-shadow 0.2s",
+              opacity: isLoading ? 0.8 : 1,
             }}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            Find Best Zones
+            {isLoading ? "Finding..." : "Find Best Zones"}
           </button>
         </div>
+
+        {searchError && (
+          <div style={{
+            background: "#fef2f2",
+            border: "1px solid #fecaca",
+            color: "#b91c1c",
+            borderRadius: 10,
+            padding: "10px 12px",
+            fontSize: 12,
+          }}>
+            {searchError}
+          </div>
+        )}
+
+        {results.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingBottom: 10 }}>
+            <h3 style={{ margin: 0, fontSize: 13, color: "#1f2937", fontWeight: 700 }}>
+              Matching Places ({results.length})
+            </h3>
+            {results.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  background: "white",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 10,
+                  padding: "10px 12px",
+                }}
+              >
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{item.name}</div>
+                <div style={{ fontSize: 11, color: "#4b5563", marginTop: 3 }}>
+                  {item.type} • {Number(item.distance_km).toFixed(2)} km
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </div>

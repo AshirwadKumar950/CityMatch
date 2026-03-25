@@ -87,21 +87,51 @@
 import { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (email.trim() === "" || password.trim() === "") {
       alert("Please enter email and password");
       return;
     }
-    setIsLoggedIn(true);
-    const from = location.state?.from || "/userprofile";
-    navigate(from);
+
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setIsLoggedIn(true);
+
+      const from = location.state?.from || "/userprofile";
+      navigate(from);
+    } catch (error) {
+      alert("Unable to connect to backend server");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -149,8 +179,9 @@ function Login({ setIsLoggedIn }) {
           style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', border: 'none', cursor: 'pointer' }}
           onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
           onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          disabled={isLoading}
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </button>
 
         <p className="mt-6 text-center text-sm text-slate-400">
