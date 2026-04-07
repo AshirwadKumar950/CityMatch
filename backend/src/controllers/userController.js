@@ -10,6 +10,7 @@ const createToken = (userId) => {
 	return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
+console.log("JWT_SECRET:", process.env.JWT_SECRET); // Debugging log
 const registerUser = async (req, res) => {
 	try {
 		const { name, email, password } = req.body;
@@ -27,12 +28,19 @@ const registerUser = async (req, res) => {
 		const user = await createUser({ name, email, passwordHash });
 		const token = createToken(user.id);
 
+		const safeUser = {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+		};
+		console.log("User created:", user);
 		return res.status(201).json({
 			message: "User registered successfully",
 			token,
-			user,
+			user: safeUser,
 		});
 	} catch (error) {
+		console.error("REGISTER ERROR:", error);
 		return res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
@@ -79,8 +87,14 @@ const getUserProfile = async (req, res) => {
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
+		const safeUser = {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			created_at: user.created_at,
+		};
 
-		return res.status(200).json({ user });
+		return res.status(200).json({ user: safeUser });
 	} catch (error) {
 		return res.status(500).json({ message: "Server error", error: error.message });
 	}

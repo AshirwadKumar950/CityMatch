@@ -72,6 +72,7 @@ import {
   useMapEvents,
   Circle,
   useMap,
+  Polygon,
 } from "react-leaflet";
 import L from "leaflet";
 
@@ -419,28 +420,46 @@ export default function MapComponent({ setSelectedLocation, preferredLocations =
           setSelectedLocation={setSelectedLocation}
         />
         {preferredLocations
-          .filter((place) => Number.isFinite(Number(place.latitude)) && Number.isFinite(Number(place.longitude)))
-          .map((place) => (
-            <Marker
-              key={`${place.id}-${place.latitude}-${place.longitude}`}
-              position={[Number(place.latitude), Number(place.longitude)]}
-              icon={createResultIcon()}
-            >
-              <Popup>
-                <div style={{ fontFamily: "'DM Sans',sans-serif", minWidth: 160 }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, color: "#064e3b", marginBottom: 4 }}>
-                    {place.name}
+          .filter((zone) => zone.center && Number.isFinite(Number(zone.center.lat)) && Number.isFinite(Number(zone.center.lon)))
+          .map((zone, idx) => {
+            const elements = [];
+            if (zone.boundary && zone.boundary.length >= 3) {
+              elements.push(
+                <Polygon
+                  key={`poly-${idx}`}
+                  positions={zone.boundary.map(p => [Number(p.lat), Number(p.lon)])}
+                  pathOptions={{
+                    color: "#10b981",
+                    fillColor: "#10b981",
+                    fillOpacity: 0.15,
+                    weight: 2
+                  }}
+                />
+              );
+            }
+            elements.push(
+              <Marker
+                key={`marker-${idx}`}
+                position={[Number(zone.center.lat), Number(zone.center.lon)]}
+                icon={createResultIcon()}
+              >
+                <Popup>
+                  <div style={{ fontFamily: "'DM Sans',sans-serif", minWidth: 160 }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: "#064e3b", marginBottom: 4 }}>
+                      Zone Ranking #{zone.rank}
+                    </div>
+                    <div style={{ fontSize: 11, color: "#4b5563" }}>
+                      Score: {zone.score !== null ? Number(zone.score).toFixed(2) : "Weber Fallback"}
+                    </div>
+                    <div style={{ marginTop: 6, fontSize: 11, color: "#065f46", fontWeight: 600 }}>
+                      Amenities: {zone.amenities ? zone.amenities.length : 0}
+                    </div>
                   </div>
-                  <div style={{ fontSize: 11, color: "#4b5563" }}>
-                    {place.type}
-                  </div>
-                  <div style={{ marginTop: 6, fontSize: 11, color: "#065f46", fontWeight: 600 }}>
-                    Distance: {Number(place.distance_km).toFixed(2)} km
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+                </Popup>
+              </Marker>
+            );
+            return elements;
+          })}
         <FlyTo position={position} />
         <ZoomButtons />
         <RecenterBtn userPos={userPos} />

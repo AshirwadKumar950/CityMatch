@@ -20,228 +20,35 @@
 // //  */
 
 
-
-// const FACILITIES = [
-//   { id: "Hospital",       icon: "🏥" },
-//   { id: "School",         icon: "🏫" },
-//   { id: "Mall",           icon: "🛍️" },
-//   { id: "Gym",            icon: "🏋️" },
-//   { id: "Park",           icon: "🌳" },
-//   { id: "Metro Station",  icon: "🚇" },
-//   { id: "Restaurant",     icon: "🍽️" },
-//   { id: "Airport",        icon: "✈️" },
-//   { id: "Office Area",    icon: "🏢" },
-//   { id: "Bus Stop",       icon: "🚌" },
-//   { id: "University",     icon: "🎓" },
-//   { id: "Supermarket",    icon: "🛒" },
-// ];
-
-// const TRAVEL_MODES = [
-//   { id: "walking",  icon: "🚶", label: "Walk"   },
-//   { id: "cycling",  icon: "🚴", label: "Cycle"  },
-//   { id: "driving",  icon: "🚗", label: "Drive"  },
-//   { id: "transit",  icon: "🚇", label: "Transit" },
-// ];
-
-
-
-
-
-// import React, { useState, useRef, useEffect } from "react";
-// import DistanceSelector from "./DistanceSelector";
-
-// const facilities = [
-//   { id: "Hospital",       icon: "🏥" },
-//   { id: "School",         icon: "🏫" },
-//   { id: "Mall",           icon: "🛍️" },
-//   { id: "Gym",            icon: "🏋️" },
-//   { id: "Park",           icon: "🌳" },
-//   { id: "Metro Station",  icon: "🚇" },
-//   { id: "Restaurant",     icon: "🍽️" },
-//   { id: "Airport",        icon: "✈️" },
-//   { id: "Office Area",    icon: "🏢" },
-//   { id: "Bus Stop",       icon: "🚌" },
-//   { id: "University",     icon: "🎓" },
-//   { id: "Supermarket",    icon: "🛒" },
-// ];
-
-// function InfoForm({ selectedLocation }) {
-//   const [location, setLocation] = useState("");
-//   const [selectedFacilities, setSelectedFacilities] = useState([]);
-//   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-//   const [distanceData, setDistanceData] = useState({
-//     value: "",
-//     unit: "km",
-//     travelMode: "walking"
-//   });
-
-//   const dropdownRef = useRef(null);
-
-//   // Auto update when map is clicked
-//   useEffect(() => {
-//     if (selectedLocation) {
-//       setLocation(selectedLocation);
-//     }
-//   }, [selectedLocation]);
-
-//   // Close dropdown on outside click
-//   useEffect(() => {
-//     function handleClickOutside(event) {
-//       if (
-//         dropdownRef.current &&
-//         !dropdownRef.current.contains(event.target)
-//       ) {
-//         setDropdownOpen(false);
-//       }
-//     }
-
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () =>
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     }, []);
-
-//     const toggleFacility = (facilityId) => {
-//       if (selectedFacilities.includes(facilityId)) {
-//         setSelectedFacilities(
-//           selectedFacilities.filter((item) => item !== facilityId)
-//         );
-//       } else {
-//         setSelectedFacilities([...selectedFacilities, facilityId]);
-//       }
-//     };
-
-//     const handleSubmit = () => {
-//       const formData = {
-//         location,
-//         facilities: selectedFacilities,
-//         distance: distanceData
-//       };
-
-//       console.log("Final Form Data:", formData);
-//     };
-
-//   return (
-//     <div className="p-6">
-//       <h2 className="text-2xl text-[oklch(39.4%_0.023_107.4)] font-bold mb-4">
-//         Property Details
-//       </h2>
-
-//       {/* Location Input */}
-//       <input
-//         type="text"
-//         placeholder="Enter the address or click on map"
-//         value={location}
-//         onChange={(e) => setLocation(e.target.value)}
-//         className="border bg-[oklch(73.7%_0.021_106.9)] p-2 w-full mb-4 rounded"
-//       />
-
-//       {/* Facilities Dropdown */}
-//       <div className="relative mb-4" ref={dropdownRef}>
-//         <div
-//           onClick={() => setDropdownOpen(!dropdownOpen)}
-//           className="border p-2 rounded cursor-pointer bg-[oklch(73.7%_0.021_106.9)]"
-//         >
-//           {selectedFacilities.length > 0
-//             ? selectedFacilities.map((id) => {
-//                 const f = facilities.find((f) => f.id === id);
-//                 return f ? `${f.icon} ${f.id}` : id;
-//               }).join(", ")
-//             : "Select preferred facilities"}
-//         </div>
-
-//         {dropdownOpen && (
-//           <div className="absolute z-10 bg-[oklch(58%_0.031_107.3)] text-white border w-full mt-1 max-h-60 overflow-y-auto rounded shadow-md">
-//             {facilities.map((facility) => (
-//               <label
-//                 key={facility.id}
-//                 className="block px-3 py-2 hover:bg-white/10 cursor-pointer"
-//               >
-//                 <input
-//                   type="checkbox"
-//                   checked={selectedFacilities.includes(facility.id)}
-//                   onChange={() => toggleFacility(facility.id)}
-//                   className="mr-2"
-//                 />
-//                 {facility.icon} {facility.id}
-//               </label>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Distance Component */}
-//       <DistanceSelector
-//         distanceData={distanceData}
-//         setDistanceData={setDistanceData}
-//       />
-
-//       {/* Submit */}
-//       <button
-//         onClick={handleSubmit}
-//         className="bg-[oklch(15.3%_0.006_107.1)] text-white px-4 py-2 rounded"
-//       >
-//         Submit
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default InfoForm;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useRef, useEffect } from "react";
 import DistanceSelector from "./DistanceSelector";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 const facilities = [
-  { id: "Hospital",      icon: "🏥" },
-  { id: "School",        icon: "🏫" },
-  { id: "Mall",          icon: "🛍️" },
-  { id: "Gym",           icon: "🏋️" },
-  { id: "Park",          icon: "🌳" },
+  { id: "Hospital", icon: "🏥" },
+  { id: "School", icon: "🏫" },
+  { id: "Mall", icon: "🛍️" },
+  { id: "Gym", icon: "🏋️" },
+  { id: "Park", icon: "🌳" },
   { id: "Metro Station", icon: "🚇" },
-  { id: "Restaurant",    icon: "🍽️" },
-  { id: "Airport",       icon: "✈️" },
-  { id: "Office Area",   icon: "🏢" },
-  { id: "Bus Stop",      icon: "🚌" },
-  { id: "University",    icon: "🎓" },
-  { id: "Supermarket",   icon: "🛒" },
+  { id: "Restaurant", icon: "🍽️" },
+  { id: "Airport", icon: "✈️" },
+  { id: "Office Area", icon: "🏢" },
+  { id: "Bus Stop", icon: "🚌" },
+  { id: "University", icon: "🎓" },
+  { id: "Supermarket", icon: "🛒" },
 ];
 
+// takes two props location and function to send results back
 function InfoForm({ selectedLocation, onResultsChange }) {
-  const [location, setLocation] = useState("");
-  const [selectedFacilities, setSelectedFacilities] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [focusedInput, setFocusedInput] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchError, setSearchError] = useState("");
-  const [results, setResults] = useState([]);
+  const [location, setLocation] = useState("");// Stores user’s location
+  const [selectedFacilities, setSelectedFacilities] = useState([]); // Stores selected facilities (array)
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Controls dropdown visibility
+  const [focusedInput, setFocusedInput] = useState(false); // Controls input focus state
+  const [isLoading, setIsLoading] = useState(false); // Controls loading state
+  const [searchError, setSearchError] = useState(""); // Stores search error messages
+  const [results, setResults] = useState([]); // Stores search results
 
   const [distanceData, setDistanceData] = useState({
     value: "",
@@ -268,6 +75,8 @@ function InfoForm({ selectedLocation, onResultsChange }) {
   }, []);
 
   // Inject fonts + keyframe styles once
+  // Adds Google Fonts
+  // Adds custom CSS animations
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -335,7 +144,7 @@ function InfoForm({ selectedLocation, onResultsChange }) {
           longitude: parsedLocation.longitude,
           facilities: selectedFacilities,
           distance: distanceData,
-          limit: 20,
+          top_n: 3,
         }),
       });
 
@@ -344,10 +153,17 @@ function InfoForm({ selectedLocation, onResultsChange }) {
         throw new Error(data.message || "Unable to fetch matching places");
       }
 
-      const nextResults = data.results || [];
-      setResults(nextResults);
+      const zones = data.zones || [];
+      const hotspots = zones.map(zone => ({
+        center: zone.centroid,       // main point
+        boundary: zone.polygon,      // region shape
+        amenities: zone.amenities,   // optional markers inside
+        rank: zone.rank,
+        score: zone.score,
+      }));
+      setResults(hotspots);
       if (typeof onResultsChange === "function") {
-        onResultsChange(nextResults);
+        onResultsChange(hotspots);
       }
     } catch (error) {
       setSearchError(error.message || "Unable to fetch matching places");
@@ -524,9 +340,9 @@ function InfoForm({ selectedLocation, onResultsChange }) {
               }}>
                 {selectedFacilities.length > 0
                   ? selectedFacilities.map((id) => {
-                      const f = facilities.find((f) => f.id === id);
-                      return f ? `${f.icon} ${f.id}` : id;
-                    }).join("  ·  ")
+                    const f = facilities.find((f) => f.id === id);
+                    return f ? `${f.icon} ${f.id}` : id;
+                  }).join("  ·  ")
                   : "Select preferred facilities"}
               </span>
               <svg
@@ -714,11 +530,11 @@ function InfoForm({ selectedLocation, onResultsChange }) {
         {results.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingBottom: 10 }}>
             <h3 style={{ margin: 0, fontSize: 13, color: "#1f2937", fontWeight: 700 }}>
-              Matching Places ({results.length})
+              Top Hotspots ({results.length})
             </h3>
-            {results.map((item) => (
+            {results.map((item, index) => (
               <div
-                key={item.id}
+                key={index}
                 style={{
                   background: "white",
                   border: "1px solid #e5e7eb",
@@ -726,9 +542,9 @@ function InfoForm({ selectedLocation, onResultsChange }) {
                   padding: "10px 12px",
                 }}
               >
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{item.name}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>Zone Ranking #{item.rank}</div>
                 <div style={{ fontSize: 11, color: "#4b5563", marginTop: 3 }}>
-                  {item.type} • {Number(item.distance_km).toFixed(2)} km
+                  {item.score !== null ? `Score: ${Number(item.score).toFixed(2)}` : "Weber Fallback Zone"} • Amenities: {item.amenities ? item.amenities.length : 0}
                 </div>
               </div>
             ))}
