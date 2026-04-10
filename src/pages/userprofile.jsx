@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import mypic from '../assets/mysnappic.jpeg';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function UserProfile({ setIsLoggedIn }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -11,7 +13,7 @@ function UserProfile({ setIsLoggedIn }) {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/users/profile", {
+        const res = await fetch(`${API_BASE_URL}/api/users/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -24,7 +24,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import DistanceSelector from "./DistanceSelector";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const facilities = [
   { id: "Hospital",      icon: "🏥" },
