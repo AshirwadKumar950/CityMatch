@@ -1,0 +1,81 @@
+# Backend Codebase & Algorithm Analysis
+
+Your backend is built using **Node.js, Express, and Supabase (PostgreSQL + PostGIS)**. The primary goal of the backend is to accept user preferences (like their office location, preferred walking distance, and required facilities) and calculate the **"Optimal Zones"** (Hotspots) for them to live in.
+
+Below is a complete file-by-file, line-by-line explanation of the entire flow, followed by a deep dive into the algorithm doing the heavy lifting.
+
+---
+
+## 1. The Entry Points
+
+### `server.js` & `app.js` (The Setup)
+- **`server.js`**: Loads environment variables, connects to the Supabase Database to verify the connection (`checkDBConnection()`), and starts the Express web server on port 5000.
+- **`app.js`**: Initializes the Express app.
+  - `app.use(cors())`: Allows your React frontend to communicate with the backend.
+  - `app.use(express.json())`: Converts incoming JSON data into usable Javascript objects.
+  - Registers the main routes: `/api/users` and `/api/places`. 
+
+When the React frontend makes a request for hotspots, it calls `POST /api/places/search`, which is handled by the `placeController.js`.
+
+---
+
+## 2. Line-by-Line Explanation: `placeController.js`
+
+This file handles the incoming search request, transforms the data, queries the database, and passes the raw locations to the optimization algorithm.
+
+- **Lines 5-18:** Defines `FACILITY_TYPE_MAP`. This maps user-friendly terms from the frontend (e.g., "Hospital") to the raw tags used in your database (e.g., "hospital", "clinic", "blood_bank").
+- **Lines 20-37 (`toMaxDistanceKm`)**: Converts the user's selected distance text into pure kilometers so the database mathematically understands it. It handles distance whether it's expressed in simple "km" or by travel mode (walking, cycling, driving) based on average speeds.
+- **Lines 40-43 (`normalizeRequestedTypes`)**: Takes the user's selected list (like `["Hospital", "Gym"]`) and inflates it into the raw database terms `["hospital", "clinic", "blood_bank", "gym", "fitness_centre"]`.
+- **Lines 45-62**: The main `searchPlaces` function begins. We extract `latitude`, `longitude`, `facilities`, and `distance` from the frontend's request body and validate them.
+- **Lines 63-71 (🔥 The Database Call)**: We call a custom Supabase Postgres function named `search_places` using `supabase.rpc()`.
+  - Inside the database, this RPC uses **PostGIS**, a geographic data tool, to draw a raw circle around the User's office coordinates and pulls out *every single amenity* that matches the requested tags.
+- **Lines 91-99**: We loop through the raw database response and format it into clean objects (`amenityRows`) containing `lat`, `lon`, `type`, and `distance_km`.
+- **Lines 101-109**: We feed these raw amenities to our custom clustering and optimization algorithm `findOptimalZones`.
+- **Lines 111-117**: The algorithm finishes, and the final optimized "Hotspot Zones" are returned as JSON back to the frontend.
+
+---
+
+## 3. The Algorithm: `findOptimalZones.js`
+
+This file is the geographic brain of your application. You have two algorithms in this file: an older, commented-out version (using DBSCAN clustering) and the **active** version at the bottom (lines 547-654). We will focus on the **active** algorithm.
+
+### The Algorithm We Are Using: "Radial Candidate Evaluation and Deduplication"
+
+Because pure machine learning clustering (like DBSCAN) can be unpredictable depending on the city density, your active algorithm takes a more practical, real-world approach. 
+
+**Here is the exact step-by-step logic (Lines 575-654):**
+
+1. **Creating Candidates (Lines 586-590):** The algorithm takes every single amenity fetched from the database and says: *"What if this specific amenity was the absolute center of a new residential zone?"* It measures how far this specific amenity is from the user's office.
+2. **Radial Search (Lines 595-603):** For every single amenity candidate, it draws a 2-kilometer circular radius (the maximum reasonable neighbourhood limits). It scans to see how many *other* amenities fall inside this specific circle.
+3. **Scoring (Lines 605-618):** 
+   - **Coverage Score:** It checks if the amenities clustered in the circle satisfy the user's checklist. If the user asked for a Gym and a Park, and this circle contains both, it gets an extremely high score (100%).
+   - **Proximity Penalty:** A flat penalty is subtracted from the score based on how far the center of this circle is from the user's office (`distFromOffice * 10`). We want zones that cover all amenities *but are also close to work*. 
+   - We record the final `score = coverageScore - proximityPenalty`.
+4. **Sorting (Line 624):** We take all hundreds of these hypothetical candidate circles and sort them from Highest Score to Lowest Score.
+5. **Deduplication (Lines 626-646):** Highly scored circles will likely overlap each other (e.g., two coffee shops on the same street will generate almost identical circles scoring 99%). We iterate through the sorted list. If a high-scoring circle's center is within 500 meters of an already-selected top circle, we throw it out. This ensures the user gets distinct, geographically varied choices.
+6. **Polygon Generation (Line 640):** We use the `@turf/turf` library to draw a mathematical circular ring (polygon coordinates) around the winning candidate centers so the frontend map can draw a blue circle around them.
+
+### Real-Life Example 🚶‍♂️
+
+Imagine a user named **Alice**. She works at **Connaught Place, Delhi**. She wants to use `CityMatch` to find an apartment. Her requirements are:
+- Must have a **Gym** and a **Park** nearby.
+- Within **3km** of her office.
+
+**How the Algorithm Resolves Alice's Request:**
+1. **The Database Step:** PostGIS searches a 3km radius around Connaught Place and finds 50 Parks and 50 Gyms. It returns 100 raw locations to the Node backend.
+2. **The Algorithm Step (Lines 586-590):** The Node server loops over all 100 locations. Let's look at *Location #12*, which is "Lodhi Gardens" (a park).
+3. **The Radial Search Step (Lines 595-603):** The algorithm draws a 2km imaginary circle specifically around *Lodhi Gardens*. It notices that inside this circle, there are 4 Gyms and 3 other Parks. 
+4. **The Scoring Step (Lines 605-610):** Since Alice asked for a Gym and a Park, and both are present in the *Lodhi Gardens* circle, this specific candidate gets a **100% Coverage Score**. The algorithm then subtracts a tiny penalty because Lodhi Gardens is, say, 2.5km away from Connaught Place. Total Score: `90`.
+5. **Repeating & Sorting:** It does this for all 100 locations. A location exactly next to her office that has both a Gym and Park might score `98`. *Lodhi Gardens* scores `90`. A lone park far away with no gyms near it scores `30`.
+6. **Deduplication Step (Lines 626-646):** It takes the 98-score location. It then takes the 90-score location because it's in a totally different neighbourhood. But if the 89-score location is a coffee shop just down the road from the 98-score one, it throws it away so Alice isn't looking at identical results.
+7. **Final Result:** Alice is shown distinct circular zones on her map.
+
+---
+
+### Note on the Commented Old Algorithms
+In the upper half of `findOptimalZones.js` (Lines 1-542), you have commented-out code that represents earlier architectural design attempts:
+- **DBSCAN Clustering:** Used to find naturally dense clusters of points rather than forcing a 2km radius circle.
+- **Convex Hull:** Used to wrap irregular polygon shapes tightly around the clustered points instead of drawing perfect circles.
+- **Weber Cost (Geometric Median):** Used as a fallback. If no single cluster had all required amenities, it found a mathematical center point that minimized the travel distance to *all* separated amenities (the optimal compromise point).
+
+While mathematically rigorous, these were likely commented out because strict circular areas centered on actual amenities guarantee much more predictable and uniformly aesthetic results on the front-end map.

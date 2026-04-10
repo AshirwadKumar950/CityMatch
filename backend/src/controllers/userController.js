@@ -10,7 +10,7 @@ const createToken = (userId) => {
 	return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-console.log("JWT_SECRET:", process.env.JWT_SECRET); // Debugging log
+// console.log("JWT_SECRET:", process.env.JWT_SECRET); // Debugging log
 const registerUser = async (req, res) => {
 	try {
 		const { name, email, password } = req.body;

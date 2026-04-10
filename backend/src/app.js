@@ -1,5 +1,5 @@
 const express = require("express"); // Converts incoming JSON request → JS object
-const cors = require("cors"); // allow frontend to call backend
+const cors = require("cors"); // allow frontend to call backend allow all origins
 const userRoutes = require("./routes/userRoutes");
 const placeRoutes = require("./routes/placeRoutes");
 
@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
-// app.use("/api/places", placeRoutes);
+app.use("/api/places", placeRoutes);
 
 app.use((err, req, res, next) => {
 	console.error(err.stack);
