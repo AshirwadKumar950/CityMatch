@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import naturepic from "../assets/naturepic.jpg";
-import ab from "../assets/mysnappic.jpeg";
-import city1 from "../assets/city1.png";
-import city2 from "../assets/city2.png";
-import city3 from "../assets/city3.png";
-import city4 from "../assets/city4.png";
-import city5 from "../assets/city5.png";
+// import naturepic from "../assets/naturepic.jpg";
+// import ab from "../assets/mysnappic.jpeg";
+// import city1 from "../assets/city1.png";
+// import city2 from "../assets/city2.png";
+// import city3 from "../assets/city3.png";
+// import city4 from "../assets/city4.png";
+// import city5 from "../assets/city5.png";
+const naturepic = "/naturepic.jpg";
+const ab = "/mysnappic.jpeg";
+const city1 = "/city1.png";
+const city2 = "/city2.png";
+const city3 = "/city3.png";
+const city4 = "/city4.png";
+const city5 = "/city5.png";
 import { useNavigate } from "react-router-dom";
 
 

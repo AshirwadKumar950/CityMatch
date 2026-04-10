@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import mypic from '../assets/mysnappic.jpeg';
+// import mypic from '../assets/mysnappic.jpeg';
+const mypic = "/mysnappic.jpeg";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
