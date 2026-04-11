@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Navbar from "./components/NavBar";
-import Footer from "./components/footer";
+import Footer from "./components/Footer";
 import { Routes, Route, Navigate } from "react-router-dom";
-import About from "./pages/about";
-import Login from "./pages/login";
-import Signup from "./pages/signup";
+import About from "./pages/About";
+import Login from "./pages/Login";
+import Signup from "./pages/SignUp";
 import MapPage from "./pages/mapPage";
-import UserProfile from "./pages/userprofile";
-import LandingSlider from "./components/slider";
+import UserProfile from "./pages/UserProfile";
+import LandingSlider from "./components/Slider";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 
