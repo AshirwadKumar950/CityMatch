@@ -680,3 +680,4 @@ export default function MapComponent({ setSelectedLocation, preferredLocations =
     </div>
   );
 }
+

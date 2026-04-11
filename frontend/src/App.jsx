@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/NavBar";
 import Footer from "./components/footer";
 import { Routes, Route, Navigate } from "react-router-dom";
 import About from "./pages/about";
@@ -8,6 +8,7 @@ import Signup from "./pages/signup";
 import MapPage from "./pages/mapPage";
 import UserProfile from "./pages/userprofile";
 import LandingSlider from "./components/slider";
+import "leaflet/dist/leaflet.css";
 import "./App.css";
 
 function App() {
